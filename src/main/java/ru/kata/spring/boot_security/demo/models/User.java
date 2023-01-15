@@ -1,12 +1,13 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -15,16 +16,19 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String username;
+    private String firstName;
+
+    private String lastName;
+
+    private String email;
+
+    private Integer age;
 
     private String password;
 
-    private String name;
 
-    private String surName;
-
-    private String email;
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.MERGE})
+    @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "users_id"),
@@ -35,14 +39,13 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String password, String name, String surName, String email) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.surName = surName;
+    public User(String firstName, String lastName, String email, Integer age, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
+        this.age = age;
+        this.password = password;
     }
-
 
     public Integer getId() {
         return id;
@@ -52,20 +55,20 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getSurName() {
-        return surName;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setSurName(String surName) {
-        this.surName = surName;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -76,6 +79,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+
     public Collection<Role> getRoles() {
         return roles;
     }
@@ -84,16 +88,17 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public void addRole(Role role) {
-        this.roles.add(role);
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 
 
@@ -107,9 +112,13 @@ public class User implements UserDetails {
         return password;
     }
 
+    public Integer getAge() {
+        return age;
+    }
+
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
@@ -131,4 +140,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
