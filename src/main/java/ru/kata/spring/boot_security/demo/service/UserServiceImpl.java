@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
@@ -33,8 +32,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addUser(User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        System.out.println(user);
         userRepository.save(user);
+
     }
 
     @Transactional(readOnly = true)
@@ -49,17 +48,17 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED, noRollbackFor = Exception.class)
+    @Transactional(readOnly = true)
     @Override
-    public User findUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+    public User findUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
     }
 
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findUserByEmail(username);
+        User user = findUserByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("Юзер '%s' не найден", username));
         }

@@ -33,11 +33,8 @@ public class InitUsers {
         user.addRole(roleService.addRole(new Role(1,"ROLE_USER")));
         admin.addRole(roleService.addRole(new Role(2,"ROLE_ADMIN")));
         admin.addRole(roleService.addRole(new Role(1,"ROLE_USER")));
-
-
         userService.addUser(user);
-        userService.addUser(admin);
-
+            userService.addUser(admin);
 
     }
 }

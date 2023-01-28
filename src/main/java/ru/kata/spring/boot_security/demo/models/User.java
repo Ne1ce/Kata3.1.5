@@ -20,14 +20,16 @@ public class User implements UserDetails {
 
     private String lastName;
 
-    private String email;
+    @Column(name = "email")
+    private String username;
 
     private Integer age;
 
     private String password;
 
 
-    @ManyToMany(cascade = {CascadeType.MERGE})
+//    @ManyToMany(cascade = {CascadeType.MERGE})
+    @ManyToMany
     @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "users_roles",
@@ -39,10 +41,10 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, Integer age, String password) {
+    public User(String firstName, String lastName, String username, Integer age, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
+        this.username = username;
         this.age = age;
         this.password = password;
     }
@@ -71,12 +73,9 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 
@@ -104,7 +103,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return getRoles();
     }
 
     @Override
@@ -118,7 +117,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
