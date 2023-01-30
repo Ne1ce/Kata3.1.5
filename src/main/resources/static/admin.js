@@ -178,7 +178,6 @@ if (document.getElementById('v-pills-admin')) {
 
     document.getElementById('createUserForm').addEventListener('submit', (event) => {
         event.preventDefault();
-
         const newUserRoles = [];
         if (document.getElementById('newRoleUser').selected) newUserRoles.push({id: 2, authority: 'ROLE_USER'});
         if (document.getElementById('newRoleAdmin').selected) newUserRoles.push({id: 1, authority: 'ROLE_ADMIN'});
@@ -199,10 +198,12 @@ if (document.getElementById('v-pills-admin')) {
         document.getElementById('newRoleUser').selected = true;
         document.getElementById('newRoleAdmin').selected = false;
         sendRequestInfo('POST', '/admin', newUser).then(user => {
+            window.location.replace("http://localhost:8080/admin")
             if (user.id) tableAddRowContent(user)
         });
-        (document.querySelector('#nav-tab a[href="#nav-usersTable"]')).show();
+
     });
+
 
     document.getElementById('editModal').addEventListener('show.bs.modal', (event) => {
         const userId = event.relatedTarget.getAttribute('data-bs-userId');
@@ -228,6 +229,7 @@ if (document.getElementById('v-pills-admin')) {
             if (user) allUsersTableRowUpdate(user)
         });
         document.getElementById('buttonCloseModal').click();
+        window.location.replace("http://localhost:8080/admin")
     });
 
     document.getElementById('deleteModal').addEventListener('show.bs.modal', (event) => {
@@ -240,6 +242,7 @@ if (document.getElementById('v-pills-admin')) {
     document.getElementById('deleteForm').addEventListener('submit', (event) => {
         event.preventDefault();
         sendRequestInfo('DELETE', '/admin/' + document.getElementById('deleteUserId').value).then(id => allUsersTableRowDelete(id));
+        window.location.replace("http://localhost:8080/admin")
     });
 }
 

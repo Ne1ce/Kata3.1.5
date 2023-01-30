@@ -44,7 +44,7 @@ public class AdminController {
 
     @PutMapping
     public ResponseEntity<User> update(@RequestBody User user){
-        userService.addUser(user);
+        userService.updateUser(user);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
