@@ -3,7 +3,7 @@ package ru.kata.spring.boot_security.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
@@ -16,13 +16,16 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    //encoder через внедрение теперь пункт 11
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @Transactional(readOnly = true)
+
     @Override
     public List<User> allUsers() {
         return userRepository.findAll();
@@ -33,7 +36,7 @@ public class UserServiceImpl implements UserService {
     public void addUser(User user) {
         User newUser = findUserByUsername(user.getUsername());
         if(newUser == null) {
-            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
         }
     }
@@ -42,12 +45,17 @@ public class UserServiceImpl implements UserService {
     public void updateUser(User user){
         User userToUpdate = findUserByUsername(user.getUsername());
         if(userToUpdate != null) {
-            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+         //   добавлена проверка на пустой пароль пункт 1.
+            if(user.getPassword().equals("")) {
+                user.setPassword(userToUpdate.getPassword());
+            } else {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
             userRepository.save(user);
         }
     }
 
-    @Transactional(readOnly = true)
+
     @Override
     public User showUser(Integer id) {
         return userRepository.findById(id).orElse(null);
@@ -59,7 +67,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
+    //все readonly транзакции удалены
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findUserByUsername(username);
@@ -67,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true) //удалено пункт 12
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findUserByUsername(username);
         if (user == null) {

@@ -133,7 +133,7 @@ if (document.getElementById('v-pills-admin')) {
             <label class="form-label d-block mx-auto pt-1 mt-3 mb-0 text-center fs-5 fw-bold">Email
                 <input id="usernameEdit" value="${user.username}" required type="email" class="form-control mx-auto" style="width: 250px;"></label>
             <label class="form-label d-block mx-auto pt-1 mt-3 mb-0 text-center fs-5 fw-bold">Password
-                <input id="passwordEdit" value="" type="text" class="form-control mx-auto" style="width: 250px;" placeholder=""></label>
+                <input id="passwordEdit" value="" type="password" class="form-control mx-auto" style="width: 250px;" placeholder=""></label>
             <label class="form-label d-block mx-auto pt-1 mt-3 mb-0 text-center fs-5 fw-bold">Role
                 <select size="2" multiple required class="form-select mx-auto" style="width: 250px;">
                     <option id="optionAdmin">ADMIN</option>
@@ -141,9 +141,10 @@ if (document.getElementById('v-pills-admin')) {
                 </select>
             </label>
         `;
+        //id были перепутаны местами(изменено тут и в 2х местах ниже такой же фикс) пункт 2.
         user.roles.forEach(role => {
-            if (role.id === 2) document.getElementById('optionUser').selected = true;
-            if (role.id === 1) document.getElementById('optionAdmin').selected = true;
+            if (role.id === 1) document.getElementById('optionUser').selected = true;
+            if (role.id === 2) document.getElementById('optionAdmin').selected = true;
         });
     };
 
@@ -179,8 +180,8 @@ if (document.getElementById('v-pills-admin')) {
     document.getElementById('createUserForm').addEventListener('submit', (event) => {
         event.preventDefault();
         const newUserRoles = [];
-        if (document.getElementById('newRoleUser').selected) newUserRoles.push({id: 2, authority: 'ROLE_USER'});
-        if (document.getElementById('newRoleAdmin').selected) newUserRoles.push({id: 1, authority: 'ROLE_ADMIN'});
+        if (document.getElementById('newRoleUser').selected) newUserRoles.push({id: 1, authority: 'ROLE_USER'});
+        if (document.getElementById('newRoleAdmin').selected) newUserRoles.push({id: 2, authority: 'ROLE_ADMIN'});
         const newUser = {
             firstName: document.getElementById('newUserFirstName').value,
             lastName: document.getElementById('newUserLastName').value,
@@ -201,7 +202,6 @@ if (document.getElementById('v-pills-admin')) {
             window.location.replace("http://localhost:8080/admin")
             if (user.id) tableAddRowContent(user)
         });
-
     });
 
 
@@ -214,8 +214,8 @@ if (document.getElementById('v-pills-admin')) {
     document.getElementById('editForm').addEventListener('submit', (event) => {
         event.preventDefault();
         const userRolesEdited = [];
-        if (document.getElementById('optionUser').selected) userRolesEdited.push({id: 2, authority: 'ROLE_USER'});
-        if (document.getElementById('optionAdmin').selected) userRolesEdited.push({id: 1, authority: 'ROLE_ADMIN'});
+        if (document.getElementById('optionUser').selected) userRolesEdited.push({id: 1, authority: 'ROLE_USER'});
+        if (document.getElementById('optionAdmin').selected) userRolesEdited.push({id: 2, authority: 'ROLE_ADMIN'});
         const userEdited = {
             id: document.getElementById('idEdit').value,
             firstName: document.getElementById('firstNameEdit').value,

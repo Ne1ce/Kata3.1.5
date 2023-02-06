@@ -2,12 +2,13 @@ package ru.kata.spring.boot_security.demo.models;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+
 
 @Entity
 @Table(name = "users")
@@ -28,7 +29,6 @@ public class User implements UserDetails {
     private String password;
 
 
-//    @ManyToMany(cascade = {CascadeType.MERGE})
     @ManyToMany
     @Fetch(FetchMode.JOIN)
     @JoinTable(
@@ -36,7 +36,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id")
     )
-    private Collection<Role> roles = new ArrayList<>();
+    private Collection<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -102,6 +102,7 @@ public class User implements UserDetails {
 
 
     @Override
+    @EntityGraph(attributePaths = {"roles"})
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
     }

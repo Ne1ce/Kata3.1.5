@@ -1,13 +1,15 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 
-import java.util.List;
+import java.util.Collection;
+
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -18,9 +20,8 @@ public class RoleServiceImpl implements RoleService {
         this.roleRepository = roleRepository;
     }
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED, noRollbackFor = Exception.class)
     @Override
-    public List<Role> allRoles() {
+    public Collection<Role> allRoles() {
         return roleRepository.findAll();
     }
 

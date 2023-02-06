@@ -19,9 +19,9 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
+    //Имя метода изменено пункт 6.
     @GetMapping()
-    public ResponseEntity<User> allUsers(Principal principal) {
+    public ResponseEntity<User> showUser(Principal principal) {
 
         return new ResponseEntity<>(userService.findUserByUsername(principal.getName()),
                 HttpStatus.OK);
