@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.configs;
 
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public Hibernate5Module datatypeHibernateModule() {
+        return new Hibernate5Module();
+    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

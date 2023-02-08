@@ -162,13 +162,9 @@ if (document.getElementById('v-pills-admin')) {
             <input value="${user.username}" disabled type="text" class="form-control mx-auto" style="width: 250px;">
             <label class="form-label d-block mx-auto pt-1 mt-3 mb-0 text-center fs-5 fw-bold">Role</label>
             <select size="2" disabled class="form-select mx-auto" style="width: 250px;">
+            <option id="optionAdmin">ADMIN</option>
+                    <option id="optionUser">USER</option>
         `;
-        user.roles.forEach(role => {
-            const authority = role.authority;
-            content += `
-                <option label="${authority.substring(authority.lastIndexOf('_') + 1)}"></option>
-            `;
-        });
         content += `
             </select>
         `;
