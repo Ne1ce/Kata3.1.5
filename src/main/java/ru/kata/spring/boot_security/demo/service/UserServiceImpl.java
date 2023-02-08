@@ -10,7 +10,8 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 
-import java.util.List;
+import java.util.Collection;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,16 +20,19 @@ public class UserServiceImpl implements UserService {
     //encoder через внедрение теперь пункт 11
     private final PasswordEncoder passwordEncoder;
 
+
     @Autowired
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+
     }
 
 
     @Override
-    public List<User> allUsers() {
-        return userRepository.findAll();
+    public Collection<User> allUsers() {
+
+        return userRepository.allUsers();
     }
 
     @Transactional
@@ -75,7 +79,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Transactional(readOnly = true) //удалено пункт 12
+//    @Transactional(readOnly = true) //удалено пункт 12
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findUserByUsername(username);
         if (user == null) {

@@ -8,7 +8,8 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 
-import java.util.List;
+import java.util.Collection;
+
 
 @RestController
 @RequestMapping("api/admin")
@@ -21,7 +22,7 @@ public class AdminController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<User>> allUsers(){
+    public ResponseEntity<Collection<User>> allUsers(){
         return new ResponseEntity<>(userService.allUsers(),HttpStatus.OK);
     }
 

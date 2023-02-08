@@ -1,7 +1,5 @@
 package ru.kata.spring.boot_security.demo.models;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +10,8 @@ import java.util.HashSet;
 
 @Entity
 @Table(name = "users")
+@NamedEntityGraph(name = "user.roles"
+        ,attributeNodes = @NamedAttributeNode("roles")) //EntityGraph добавлен Fetch (Join) удален пункт 9.
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +28,7 @@ public class User implements UserDetails {
 
     private String password;
 
-
     @ManyToMany
-    @Fetch(FetchMode.JOIN)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "users_id"),
@@ -141,4 +139,16 @@ public class User implements UserDetails {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", age=" + age +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
+    }
 }
